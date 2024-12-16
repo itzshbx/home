@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساعة بيت عبدالله الذكية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Noto Kufi Arabic", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('bggg.jpeg') center/cover fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #daa520;
+            padding: 1rem;
+            flex-direction: column;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            width: 98%;
+            max-width: 1600px;
+            padding: 2.5rem;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 30px;
+            border: 4px solid #daa520;
+            box-shadow: 0 0 70px rgba(218, 165, 32, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            margin-bottom: 1rem;
+        }
+
+        .developer-credit {
+            font-size: 0.8rem;
+            color: rgba(218, 165, 32, 0.7);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('mosque-pattern.png') center/contain;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .clock-section {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(218, 165, 32, 0.1);
+            border-radius: 20px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 165, 32, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .clock-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .location-title {
+            font-size: 1.8rem;
+            color: #daa520;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .current-time {
+            font-size: 4.5rem;
+            color: #daa520;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .date-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .gregorian-date, .hijri-date {
+            font-size: 1.6rem;
+            color: #daa520;
+            padding: 1rem;
+            background: rgba(218, 165, 32, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(218, 165, 32, 0.2);
+        }
+
+        .gregorian-date:hover, .hijri-date:hover {
+            transform: scale(1.02);
+            background: rgba(218, 165, 32, 0.15);
+        }
+
+        .dua-section {
+            padding: 2.5rem;
+            background: rgba(218, 165, 32, 0.1);
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 165, 32, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .dua-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .dua-text {
+            font-size: 1.6rem;
+            color: #daa520;
+            margin: 2rem 0;
+            line-height: 2;
+            opacity: 0;
+            transition: all 1s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            background: rgba(218, 165, 32, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(218, 165, 32, 0.2);
+        }
+
+        .dua-text.active {
+            opacity: 1;
+            transform: scale(1.03);
+        }
+
+        .ramadan-section {
+            padding: 2rem;
+            background: rgba(218, 165, 32, 0.1);
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 165, 32, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .ramadan-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .ramadan-countdown {
+            font-size: 2rem;
+            color: #daa520;
+            margin: 1.5rem 0;
+            animation: glow 2s infinite alternate;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #daa520;
+            }
+            to {
+                text-shadow: 0 0 25px #daa520;
+            }
+        }
+
+        .ramadan-info {
+            font-size: 1.4rem;
+            color: #daa520;
+            line-height: 1.8;
+        }
+
+        .quran-player {
+            width: 100%;
+            padding: 2rem;
+            background: rgba(218, 165, 32, 0.1);
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 165, 32, 0.2);
+            margin-top: 2rem;
+        }
+
+        .quran-player h2 {
+            color: #daa520;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .surah-select {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 1rem 0;
+            background: rgba(218, 165, 32, 0.1);
+            border: 1px solid rgba(218, 165, 32, 0.3);
+            color: #daa520;
+            border-radius: 10px;
+            font-size: 1.2rem;
+        }
+
+        .surah-select option {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="clock-section">
+            <h2 class="location-title">ساعة بيت عبدالله الذكية</h2>
+            <div class="current-time" id="current-time">00:00:00</div>
+            <div class="date-section">
+                <div class="gregorian-date" id="gregorian-date"></div>
+                <div class="hijri-date" id="hijri-date"></div>
+            </div>
+        </div>
+
+        <div class="dua-section">
+            <h2>الأدعية</h2>
+            <div class="dua-text" id="dua-display"></div>
+        </div>
+
+        <div class="ramadan-section">
+            <div class="ramadan-countdown" id="ramadan-countdown"></div>
+            <div class="ramadan-info" id="ramadan-info"></div>
+            <div class="quran-player">
+                <h2>استمع إلى القرآن الكريم</h2>
+                <select class="surah-select" id="surah-select">
+                    <option value="001">سورة الفاتحة</option>
+                    <option value="002">سورة البقرة</option>
+                    <option value="003">سورة آل عمران</option>
+                    <option value="004">سورة النساء</option>
+                    <option value="005">سورة المائدة</option>
+                    <option value="006">سورة الأنعام</option>
+                    <option value="007">سورة الأعراف</option>
+                    <option value="008">سورة الأنفال</option>
+                    <option value="009">سورة التوبة</option>
+                    <option value="010">سورة يونس</option>
+                    <option value="011">سورة هود</option>
+                    <option value="012">سورة يوسف</option>
+                    <option value="013">سورة الرعد</option>
+                    <option value="014">سورة إبراهيم</option>
+                    <option value="015">سورة الحجر</option>
+                </select>
+                <audio controls id="quran-audio">
+                    <source src="https://server8.mp3quran.net/afs/001.mp3" type="audio/mpeg">
+                    متصفحك لا يدعم مشغل الصوت
+                </audio>
+            </div>
+        </div>
+    </div>
+    <div class="developer-credit">تطوير: صهيب البشري</div>
+
+    <script>
+        const duas = [
+            ["اللهم إني أسألك الهدى والتقى والعفاف والغنى", "اللهم اجعلنا من عتقائك من النار"],
+            ["رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", "اللهم إنك عفو تحب العفو فاعف عنا"],
+            ["اللهم اغفر لي وارحمني واهدني وعافني وارزقني", "رب اشرح لي صدري ويسر لي أمري"],
+            ["اللهم بلغنا رمضان وأعنا على صيامه وقيامه", "اللهم تقبل منا صيامنا وقيامنا"],
+            ["سبحان الله وبحمده سبحان الله العظيم", "اللهم اغفر لنا ذنوبنا وكفر عنا سيئاتنا"],
+            ["اللهم صل وسلم على نبينا محمد", "اللهم اجعلنا ممن يشفع لهم نبيك يوم القيامة"],
+            ["أستغفر الله العظيم وأتوب إليه", "اللهم ارزقنا حسن الخاتمة"],
+            ["لا إله إلا أنت سبحانك إني كنت من الظالمين", "اللهم نجنا من الظلم والظالمين"],
+            ["اللهم بلغنا رمضان، واجعلنا من صوامه وقوامه", "اللهم اجعل صيامنا مقبولاً وقيامنا مبروراً"]
+        ];
+
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-OM', { 
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            document.getElementById('current-time').textContent = timeString;
+            
+            const gregorianOptions = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric'
+            };
+            document.getElementById('gregorian-date').textContent = 
+                now.toLocaleDateString('ar-OM', gregorianOptions);
+            
+            const hijriOptions = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            document.getElementById('hijri-date').textContent = 
+                now.toLocaleDateString('ar-OM-u-ca-islamic', hijriOptions);
+        }
+
+        function updateRamadanCountdown() {
+            const now = new Date();
+            const ramadanDate = new Date('2025-03-01');
+            const diff = ramadanDate - now;
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            
+            if (diff > 0) {
+                document.getElementById('ramadan-countdown').innerHTML = 
+                    `متبقي حتى رمضان ${days} يوم`;
+            } else {
+                document.getElementById('ramadan-countdown').innerHTML = 
+                    "رمضان كريم";
+            }
+
+            document.getElementById('ramadan-info').innerHTML = `
+                شهر رمضان المبارك ١٤٤٦هـ<br>
+                المتوقع: ١ مارس ٢٠٢٥م<br>
+                أسألك يا الله ان تبلغنا رمضان في هذا العام غير فاقدين أو مفقودين إنك على كل شيء قدير.
+
+            `;
+        }
+
+        function rotateDuas() {
+            const duaElement = document.getElementById('dua-display');
+            let currentIndex = 0;
+
+            setInterval(() => {
+                duaElement.classList.remove('active');
+                setTimeout(() => {
+                    const currentDuas = duas[currentIndex];
+                    duaElement.innerHTML = currentDuas[0] + "<br><br>" + currentDuas[1];
+                    duaElement.classList.add('active');
+                    currentIndex = (currentIndex + 1) % duas.length;
+                }, 1000);
+            }, 7000);
+        }
+
+        document.getElementById('surah-select').addEventListener('change', function() {
+            const audio = document.getElementById('quran-audio');
+            const surahNumber = this.value;
+            audio.src = `https://server8.mp3quran.net/afs/${surahNumber}.mp3`;
+            audio.load();
+        });
+
+        setInterval(updateClock, 1000);
+        setInterval(updateRamadanCountdown, 60000);
+        updateClock();
+        updateRamadanCountdown();
+        rotateDuas();
+    </script>
+</body>
+</html>
